@@ -3,7 +3,7 @@
 angular.module('TripMeterApp')
   .controller('MainCtrl', function ($scope) {
     $scope.project  = {
-    	"name" : "TripMeter",
+    	"name" : "Trip Meter",
     	"description" : "Trip Planning Web Application using AngularJS"
     };
   });

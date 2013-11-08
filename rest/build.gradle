@@ -3,14 +3,30 @@ apply plugin: 'jetty'
 apply plugin: 'idea'
 
 repositories {
-   mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-   providedCompile 'javax.servlet:servlet-api:2.5'
-   compile 'org.springframework:spring-webmvc:3.2.4.RELEASE'
-   compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
-   runtime 'javax.servlet:jstl:1.2'
+	providedCompile 'javax.servlet:servlet-api:2.5'
+	compile 'org.springframework:spring-webmvc:3.2.4.RELEASE'
+	compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+	compile 'org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:0.31'
+	runtime 'javax.servlet:jstl:1.2'
 }
 
-jettyRunWar.contextPath = 'trip'
+// keytool -genkey -alias trpM -keypass tr1pM3t3r -keystore trpM_tomcat -storepass tr1pM3t3r
+[jettyRun, jettyRunWar]*.configure {
+//    def httpConnector = jettyRun.class.classLoader.loadClass('org.mortbay.jetty.nio.SelectChannelConnector').newInstance()
+//    httpConnector.port = 8080
+
+	def httpsConnector = jettyRun.class.classLoader.loadClass('org.mortbay.jetty.security.SslSocketConnector').newInstance()
+	httpsConnector.port = 8443
+	httpsConnector.keystore = "/home/gundsawada/trpM_tomcat"
+	httpsConnector.keyPassword = "tr1pM3t3r"
+
+	//httpsConnector.truststore = "cacerts"
+	//httpsConnector.trustPassword = "cacertspwd"
+
+	connectors = [httpsConnector]
+	contextPath = 'trip'
+}
